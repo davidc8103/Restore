@@ -12,21 +12,21 @@ namespace API.Controllers
 {
     public class AccountController : BaseApiController
     {
-        private readonly UserManager<User> _userManger;
+        private readonly UserManager<User> _userManager;
         private readonly TokenService _tokenService;
         private readonly StoreContext _context;
-        public AccountController(UserManager<User> userManger, TokenService tokenService, StoreContext context)
+        public AccountController(UserManager<User> userManager, TokenService tokenService, StoreContext context)
         {
             _context = context;
             _tokenService = tokenService;
-            _userManger = userManger;           
+            _userManager = userManager;           
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManger.FindByNameAsync(loginDto.Username);
-            if (user == null || !await _userManger.CheckPasswordAsync(user, loginDto.Password))
+            var user = await _userManager.FindByNameAsync(loginDto.Username);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
                 return Unauthorized();
 
             var userBasket = await RetrieveBasket(loginDto.Username);
@@ -53,7 +53,7 @@ namespace API.Controllers
         {
             var user = new User{UserName = registerDto.Username, Email = registerDto.Email};
 
-            var result = await _userManger.CreateAsync(user, registerDto.Password);
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (!result.Succeeded)
             {
@@ -65,7 +65,7 @@ namespace API.Controllers
                 return ValidationProblem();
             }
 
-            await _userManger.AddToRoleAsync(user, "Member");
+            await _userManager.AddToRoleAsync(user, "Member");
 
             return StatusCode(201);
         }
@@ -74,7 +74,7 @@ namespace API.Controllers
         [HttpGet("currentUser")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await _userManger.FindByNameAsync(User.Identity.Name);
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
             var userBasket = await RetrieveBasket(User.Identity.Name);
 
@@ -84,6 +84,16 @@ namespace API.Controllers
                 Token = await _tokenService.GenerateToken(user),
                 Basket = userBasket?.MapBasketToDto()
             };
+        }
+
+        [Authorize]
+        [HttpGet("savedAddress")]
+        public async Task<ActionResult<UserAddress>> GetSavedAddress()
+        {
+            return await _userManager.Users
+                .Where(x => x.UserName == User.Identity.Name)
+                .Select(user => user.Address)
+                .FirstOrDefaultAsync();
         }
 
         private async Task<Basket> RetrieveBasket(string buyerId)
