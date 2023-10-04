@@ -1,0 +1,22 @@
+# fly.toml app configuration file generated for restore777 on 2023-10-04T13:36:27-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "restore777"
+primary_region = "atl"
+
+[build]
+  image = "shin7772/restore:latest"
+
+[env]
+  ASPNETCORE_URLS="http://+:8080"
+  StripeSettings__PublishableKey="pk_test_51Nwi0UIVs48DgbLyDSJ6eMIZ7L8UkKLsTBNaQTPbTHZib1OmONK2vWfCq1joydj3srPoctgJDJ6MVQAOEjqPBtGK00JsDBFxiV"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]

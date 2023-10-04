@@ -3,7 +3,6 @@ import App from "../layout/App";
 import AboutPage from "../../features/about/AboutPage";
 import Catalog from "../../features/catalog/Catalog";
 import ProductDetails from "../../features/catalog/ProductDetails";
-import HomePage from "../../features/home/HomePage";
 import ContactPage from "../../features/contact/ContactPage";
 import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
@@ -23,7 +22,6 @@ export const router = createBrowserRouter([
                 {path: 'checkout', element: <CheckoutWrapper />},
                 {path: 'orders', element: <Orders />},
             ]},
-            {path: '', element: <HomePage />},
             {path: 'catalog', element: <Catalog />},
             {path: 'catalog/:id', element: <ProductDetails />},
             {path: 'about', element: <AboutPage />},
