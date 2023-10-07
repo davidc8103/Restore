@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for restore777 on 2023-10-04T15:12:55-04:00
+# fly.toml app configuration file generated for restore777 on 2023-10-04T17:22:43-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -12,6 +12,8 @@ primary_region = "atl"
 [env]
   ASPNETCORE_URLS = "http://+:8080"
   StripeSettings__PublishableKey = "pk_test_51Nwi0UIVs48DgbLyDSJ6eMIZ7L8UkKLsTBNaQTPbTHZib1OmONK2vWfCq1joydj3srPoctgJDJ6MVQAOEjqPBtGK00JsDBFxiV"
+  Cloudinary__CloudName="dmetzljaw"
+  Cloudinary__ApiKey="928473515116736"
 
 [http_service]
   internal_port = 8080
